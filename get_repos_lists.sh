@@ -24,10 +24,12 @@ set -euo pipefail
 # - repos in other orgs that AUTHOR contributed to (which themselves might be forks of other repos)
 # - repos owned by AUTHOR on their own profile that are forks of other repos
 # - exclude other users' forks of author's repos
-
+# - repos in orgs that are private or which AUTHOR has private membership
+#   - this might not be possible with fine grain PAT
 
 AUTHOR="$1"
-START_DATE="2015-01-01" # Joined GitHub on January 12, 2015
+DEFAULT_START_DATE="2015-01-01" # Joined GitHub on January 12, 2015
+START_DATE="${START_DATE:-${DEFAULT_START_DATE}}"
 STEP_DAYS=60 # need small step size to help avoid API rate limits
 END_DATE=$(date +"%Y-%m-%d")
 OUT_FILE="commit_repos.txt"

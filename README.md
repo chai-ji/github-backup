@@ -13,3 +13,10 @@ gh auth login
 git auth status
 
 ```
+
+
+## NOTES
+
+Fine Grained PAT cannot see membership in private Orgs, or private membership in public Orgs that do not. Need Classic Token for that (read:org).
+
+- https://github.com/settings/tokens
