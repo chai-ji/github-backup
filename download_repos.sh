@@ -40,7 +40,7 @@ git_check_for_submodules () {
     local repo_path="$1"
     local domain="$2" # needed for relative path submodule resolution
     local owner="$3"
-    echo ">>> Checking for submodules at $repo_path"
+    echo ">>> Checking for submodules at $repo_path (domain: $domain , owner: $owner)"
     (
         cd "$repo_path"
         # check if dir has git submodules
@@ -68,9 +68,14 @@ git_check_for_submodules () {
                         ;;
                     ../*)
                         echo ">>> its relative path submodule"
-                        local submodule_path="$(echo "${submodule}" | sed -e 's|^../||g' -e 's|.git$||g' )"
-                        submodule_path="${BASE_DIR}/${domain}/${owner}/${submodule_path}.git"
-                        echo ">>> submodule_path: $submodule_path"
+                        local submodule_base="$(echo "${submodule}" | sed -e 's|^../||g' -e 's|.git$||g' )"
+                        local submodule_path="${BASE_DIR}/${domain}/${owner}/${submodule_base}.git"
+                        # since its a relative path that means it does not have ssh or https associated
+                        # we need to use one or the other to do the git clone here though
+                        # so use ssh since thats usually the one we would be using in an interactive script session
+                        local submodule_url="git@${domain}:${owner}/${submodule_base}.git"
+                        echo ">>> submodule_path: $submodule_path, using submodule_url: $submodule_url"
+                        git_clone_mirror "$submodule_url" "$submodule_path"
                         ;;
                     *)
                         echo ">>> dont have a handler for this type of submodule"
