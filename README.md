@@ -38,7 +38,7 @@ Use the output file to download clones of all repos in the list
 
 ## NOTES
 
-Fine Grained PAT cannot see membership in private Orgs, or private membership in public Orgs that do not. Need Classic Token for that (read:org).
+Fine Grained PAT cannot see membership in private Orgs, or private membership in some public Orgs. Need Classic Token for that (read:org).
 
 - https://github.com/settings/tokens
 
