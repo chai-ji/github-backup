@@ -42,28 +42,37 @@ get_date () {
     fi
 }
 
-echo "Searching commits by $AUTHOR from $START_DATE to $END_DATE in steps of $STEP_DAYS days..."
+# find repos based on commits
+# this excludes repos that the AUTHOR owns which were forked from other repos
+git_search_commits () {
+    echo "Searching commits by $AUTHOR from $START_DATE to $END_DATE in steps of $STEP_DAYS days..."
 
-current="$START_DATE"
-while [[ "$current" < "$END_DATE" ]]; do
+    local current="$START_DATE"
+    while [[ "$current" < "$END_DATE" ]]; do
 
-    next="$(get_date "$current" "$STEP_DAYS" )"
-    echo "Searching from $current to $next..."
+        local next="$(get_date "$current" "$STEP_DAYS" )"
+        echo "Searching from $current to $next..."
 
-    (
-        # set -x
-        gh search commits \
-    --author "$AUTHOR" \
-    --committer-date "$current..$next" \
-    --json repository \
-    --limit 1000 |
-    jq -r 'map(select(.repository.isFork == false)) | .[].repository.url' | sed -e 's|^https://||g' >> "$OUT_FILE" || true
-    )
+        (
+            # set -x
+            gh search commits \
+        --author "$AUTHOR" \
+        --committer-date "$current..$next" \
+        --json repository \
+        --limit 1000 |
+        jq -r 'map(select(.repository.isFork == false)) | .[].repository.url' | sed -e 's|^https://||g' >> "$OUT_FILE" || true
+        )
 
-    current="$next"
+        current="$next"
 
-    sleep 5 # throttle to avoid 403 errors API rate limit
-done
+        sleep 5 # throttle to avoid 403 errors API rate limit
+    done
 
-sort -u "$OUT_FILE" > "$SORTED_FILE"
+    sort -u "$OUT_FILE" > "$SORTED_FILE"
+
+}
+
+
+
+git_search_commits
 
