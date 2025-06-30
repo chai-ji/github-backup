@@ -16,15 +16,22 @@ set -euo pipefail
 # but some still show up if the Fork-er got GitHub to disassociate the fork with the original repo
 # this also causes our own forks of other repos to not show up in the results too
 
-
 # USAGE:
 # ./get_repos_lists.sh <username>
+
+
+# TODO:
+# - repos in other orgs that AUTHOR contributed to (which themselves might be forks of other repos)
+# - repos owned by AUTHOR on their own profile that are forks of other repos
+# - exclude other users' forks of author's repos
+
 
 AUTHOR="$1"
 START_DATE="2015-01-01" # Joined GitHub on January 12, 2015
 STEP_DAYS=60 # need small step size to help avoid API rate limits
 END_DATE=$(date +"%Y-%m-%d")
 OUT_FILE="commit_repos.txt"
+OWNER_FILE="owner_repos.txt"
 SORTED_FILE="deduped_repos.txt"
 printf '' > "$OUT_FILE"
 
@@ -68,11 +75,16 @@ git_search_commits () {
         sleep 5 # throttle to avoid 403 errors API rate limit
     done
 
-    sort -u "$OUT_FILE" > "$SORTED_FILE"
-
 }
 
-
+git_repo_list () {
+    gh repo list "$AUTHOR" --limit 1000 --json url --jq '.[].url' | sed -e 's|^https://||g' > "$OWNER_FILE"
+}
 
 git_search_commits
+git_repo_list
 
+
+sort -u "$OUT_FILE" > "$SORTED_FILE"
+sort -u "$OWNER_FILE" >> "$SORTED_FILE"
+sort -u "$SORTED_FILE" > tmp && /bin/mv tmp "$SORTED_FILE"
