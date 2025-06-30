@@ -1,5 +1,6 @@
 # github backups
 
+Backup your repos from GitHub
 
 ```bash
 brew install jq gh

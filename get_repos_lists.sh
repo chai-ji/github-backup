@@ -18,7 +18,7 @@ set -euo pipefail
 
 
 # USAGE:
-# ./get_repos_from_commit_search.sh <username>
+# ./get_repos_lists.sh <username>
 
 AUTHOR="$1"
 START_DATE="2015-01-01" # Joined GitHub on January 12, 2015
