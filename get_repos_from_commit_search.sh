@@ -29,7 +29,8 @@ SORTED_FILE="deduped_repos.txt"
 printf '' > "$OUT_FILE"
 
 get_date () {
-    local CURRENT="$1"
+    # get the current date plus some number of days
+    local CURRENT="$1" # YYYY-MM-DD
     local DAYS="$2"
 
     if date --version >/dev/null 2>&1; then
