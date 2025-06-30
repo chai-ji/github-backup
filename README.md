@@ -10,6 +10,8 @@ brew install jq gh
 # # Repository: contents - read only ; metadata - read only
 # # Account: Profile - read only ; Git ssh keys - read only
 gh auth login
+
+# check login status
 git auth status
 
 ```
@@ -20,3 +22,5 @@ git auth status
 Fine Grained PAT cannot see membership in private Orgs, or private membership in public Orgs that do not. Need Classic Token for that (read:org).
 
 - https://github.com/settings/tokens
+
+need this for `gh api user/orgs` ; `gh api users/<username>/orgs` only shows public memberships

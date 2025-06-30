@@ -2,3 +2,5 @@ commit_repos.txt
 deduped_repos.txt
 owner_repos.txt
 github.com
+github.com*
+test_repo_list.txt
