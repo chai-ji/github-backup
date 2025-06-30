@@ -1,6 +1,10 @@
-# github backups
+# Github Backup Scripts
 
-Backup your repos from GitHub
+Scripts to help you backup your repos from GitHub.
+
+## Requirements
+
+Install dependencies and log in with a PAT from GitHub
 
 ```bash
 brew install jq gh
@@ -16,6 +20,21 @@ git auth status
 
 ```
 
+## Usage
+
+Create a list of all your repos
+
+```bash
+./get_repos_lists.sh <username>
+```
+- this script will search all your commits to find repos, this might take several minutes to complete
+- see notes about which repos are retrievable this way
+
+Use the output file to download clones of all repos in the list
+
+```bash
+./download_repos.sh deduped_repos.txt
+```
 
 ## NOTES
 
