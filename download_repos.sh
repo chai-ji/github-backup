@@ -38,6 +38,9 @@ git_clone_mirror () {
 # inspect the bare git mirror clone for submodules and clone those too
 git_check_for_submodules () {
     local repo_path="$1"
+    local domain="$2" # needed for relative path submodule resolution
+    local owner="$3"
+    echo ">>> Checking for submodules at $repo_path"
     (
         cd "$repo_path"
         # check if dir has git submodules
@@ -58,14 +61,19 @@ git_check_for_submodules () {
                         ;;
                     http*)
                         echo ">>> its http submodule: $submodule"
-                        local submodule_path="$(echo "${submodule}" | sed -e 's|http.*://||g' )"
+                        local submodule_path="$(echo "${submodule}" | sed -e 's|http.*://||g' -e 's|.git$||g' )"
                         submodule_path="${BASE_DIR}/${submodule_path}.git"
                         echo ">>> submodule_path: $submodule_path"
                         git_clone_mirror "$submodule" "$submodule_path"
                         ;;
+                    ../*)
+                        echo ">>> its relative path submodule"
+                        local submodule_path="$(echo "${submodule}" | sed -e 's|^../||g' -e 's|.git$||g' )"
+                        submodule_path="${BASE_DIR}/${domain}/${owner}/${submodule_path}.git"
+                        echo ">>> submodule_path: $submodule_path"
+                        ;;
                     *)
                         echo ">>> dont have a handler for this type of submodule"
-                        # TODO: relative path submodules that start with "../" go here
                         ;;
                 esac
             done
@@ -75,11 +83,11 @@ git_check_for_submodules () {
 
 # clone all the repos in the list
 while IFS="/" read -r domain owner repo; do
-    echo "domain: $domain , owner: $owner , repo: $repo" # github.com username reponame
+    # echo "domain: $domain , owner: $owner , repo: $repo" # github.com username reponame
     repo_parent_dir="${domain}/${owner}" # github.com/username
     repo_path="${BASE_DIR}/${repo_parent_dir}/${repo}.git" # $PWD/github.com/username/reponame.git
     repo_url="git@${domain}:${owner}/${repo}.git" # git@github.com:username/reponame.git
 
     git_clone_mirror "$repo_url" "$repo_path"
-    git_check_for_submodules "$repo_path"
+    git_check_for_submodules "$repo_path" "$domain" "$owner"
 done < "$LIST"
