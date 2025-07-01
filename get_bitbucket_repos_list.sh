@@ -7,7 +7,7 @@ set -euo pipefail
 # save it as TOKEN
 
 # USAGE:
-# ./get_bitbucket_repos.sh <username> "$(cat ~/.bitbucket/token.txt)"
+# ./get_bitbucket_repos_list.sh <username> "$(cat ~/.bitbucket/token.txt)"
 
 # NOTE:
 # https://bitbucket.status.atlassian.com/
@@ -28,7 +28,7 @@ echo "Getting repos from ${WORKSPACE}"
 
 # the API is really lousy so do small pages or it might break...
 page=1
-NEXT="https://api.bitbucket.org/2.0/repositories/${WORKSPACE}?pagelen=5"
+NEXT="https://api.bitbucket.org/2.0/repositories/${WORKSPACE}?pagelen=10"
 while [[ -n "$NEXT" ]]; do
     echo "getting page $page"
     RESPONSE=$(curl -s -u "$USERNAME:$TOKEN" "$NEXT")
