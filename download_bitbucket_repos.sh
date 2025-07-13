@@ -13,9 +13,24 @@ LIST="$1" # bitbucket_repos.txt
 BASE_DIR=$PWD
 DOMAIN=bitbucket.org
 
+# clone a mirror of the source repo
+git_clone_mirror () {
+    local repo_url="$1"
+    local repo_path="$2"
+    echo "-----------"
+    echo ">>> Retrieving ${repo_url}, saving to ${repo_path}"
+    if [ ! -d "$repo_path" ]; then
+        echo "Creating mirror clone..."
+        (set -x; cd $BASE_DIR; git clone --mirror "$repo_url" "$repo_path")
+    else
+        echo "Fetching updates for existing mirror..."
+        (set -x; cd $BASE_DIR; git --git-dir="$repo_path" fetch --all --prune)
+    fi
+}
+
 while IFS=$'\t' read -r owner_repo projectID repo_url; do
     echo "-----------"
     echo "owner_repo: $owner_repo, projectID: $projectID, repo_url: $repo_url"
     repo_path="${BASE_DIR}/${DOMAIN}/${owner_repo}.git"
-    (set -x; git clone --mirror "$repo_url" "$repo_path")
+    git_clone_mirror "$repo_url" "$repo_path"
 done < "$LIST"
