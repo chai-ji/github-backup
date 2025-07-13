@@ -28,7 +28,7 @@ git_clone_mirror () {
     echo ">>> Retrieving ${repo_url}, saving to ${repo_path}"
     if [ ! -d "$repo_path" ]; then
         echo "Creating mirror clone..."
-        (set -x; cd $BASE_DIR; git clone --mirror "$repo_url" "$repo_path")
+        (set -x; cd $BASE_DIR; git clone --mirror "$repo_url" "$repo_path" || echo "ERROR: could not download repo $repo_url to $repo_path")
     else
         echo "Fetching updates for existing mirror..."
         (set -x; cd $BASE_DIR; git --git-dir="$repo_path" fetch --all --prune)
