@@ -31,6 +31,8 @@ AUTHOR="$1"
 DEFAULT_START_DATE="2015-01-01" # Joined GitHub on January 12, 2015
 START_DATE="${START_DATE:-${DEFAULT_START_DATE}}"
 STEP_DAYS=60 # need small step size to help avoid API rate limits
+DEFAULT_SLEEP=5 # need to throttle to help avoid API rate limits
+SLEEP=${SLEEP:-${DEFAULT_SLEEP}}
 END_DATE=$(date +"%Y-%m-%d")
 OUT_FILE="commit_repos.txt"
 OWNER_FILE="owner_repos.txt"
@@ -74,7 +76,7 @@ git_search_commits () {
 
         current="$next"
 
-        sleep 5 # throttle to avoid 403 errors API rate limit
+        sleep "$SLEEP" # throttle to avoid 403 errors API rate limit
     done
 
 }
