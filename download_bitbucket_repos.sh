@@ -10,8 +10,10 @@ set -euo pipefail
 # TODO: figure out how to incorporate projectID
 
 LIST="$1" # bitbucket_repos.txt
-BASE_DIR=$PWD
 DOMAIN=bitbucket.org
+
+BASE_DIR="${PWD}/repos"
+mkdir -p "${BASE_DIR}"
 
 # clone a mirror of the source repo
 git_clone_mirror () {

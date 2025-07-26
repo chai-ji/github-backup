@@ -13,12 +13,14 @@ set -euo pipefail
 # - get relative path submodules that have url that starts with ../
 
 LIST="$1" # deduped_repos.txt
-BASE_DIR=$PWD
 
 if [ ! -f "$LIST" ]; then
 echo "$LIST file does not exist"
 exit 1
 fi
+
+BASE_DIR="${PWD}/repos"
+mkdir -p "${BASE_DIR}"
 
 # clone a mirror of the source repo
 git_clone_mirror () {
