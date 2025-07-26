@@ -13,7 +13,7 @@ brew install jq gh
 # generate PAT https://github.com/settings/personal-access-tokens
 # - Repository access: All repositories
 # - Repository permissions: contents - read only ; metadata - read only
-# # Account: Profile - read only ; Git ssh keys - read only
+# - Account permissions: Profile - read only ; Git ssh keys - read only
 gh auth login
 
 # check login status
