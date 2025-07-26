@@ -1,10 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-# Create an app password with:
-# Repository: Read
+# Create an app password ; https://bitbucket.org/account/settings/app-passwords/
+#
+# Permissions;
+#
 # Account: Read
-# save it as TOKEN
+# Repository: Read
+#
+# save it as TOKEN to file ~/.bitbucket/token.txt
 
 # USAGE:
 # ./get_bitbucket_repos_list.sh <username> "$(cat ~/.bitbucket/token.txt)"
