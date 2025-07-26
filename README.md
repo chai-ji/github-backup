@@ -21,7 +21,18 @@ git auth status
 
 ```
 
-- Note the GitHub API Limits described [here](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#primary-rate-limit-for-authenticated-users)
+### API Rate Limits
+
+Note the GitHub API Limits described [here](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#primary-rate-limit-for-authenticated-users)
+
+> Primary rate limit for authenticated users
+> All of these requests count towards your personal rate limit of 5,000 requests per hour.
+
+> About secondary rate limits
+> No more than 900 points per minute are allowed for REST API endpoints, and no more than 2,000 points per minute are allowed for the GraphQL API endpoint.
+> No more than 90 seconds of CPU time per 60 seconds of real time is allowed. You can roughly estimate the CPU time by measuring the total response time for your API requests.
+
+> If you exceed your primary rate limit, you will receive a 403 or 429 response
 
 ## Usage
 
